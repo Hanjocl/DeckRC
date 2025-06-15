@@ -1,6 +1,6 @@
 #include <iostream>
-#include "include\operations.h"
-#include "include\dog.h"
+#include "include/operations.h"
+#include "include/dog.h"
 
 int main() {
     Dog dog1("Buddy");
