@@ -1,5 +1,4 @@
 #include <iostream>
-#include <concepts>
 #include "include\operations.h"
 #include "include\dog.h"
 

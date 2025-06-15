@@ -7,6 +7,9 @@ project(DeckRC
         VERSION 0.0.1
         DESCRIPTION "DeckRC - A Decky Plugin for Remote Control"
         LANGUAGES CXX)
+        
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+message(STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
 
 
 add_library(operations STATIC src/operations.cpp)
@@ -24,3 +27,7 @@ add_executable(DeckRC main.cpp)
 
 target_link_libraries(DeckRC PUBLIC operations)
 target_link_libraries(DeckRC PUBLIC dog)
+
+#Clang formatting
+include(ClangFormat)
+add_clang_format_target(format-code ${PROJECT_SOURCE_DIR})  # add "-t format-code" to execute function
