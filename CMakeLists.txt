@@ -10,6 +10,7 @@ project(DeckRC
         
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 message(STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
+message(STATUS "PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 
 add_library(operations STATIC src/operations.cpp)
@@ -22,7 +23,7 @@ add_library(dog STATIC src/dog.cpp)
 target_include_directories(dog PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_features(dog PUBLIC cxx_std_20)                                  # Not required if using SET CMAKE_CXX_STANDARD, but good practice
 
-add_executable(DeckRC main.cpp)
+add_executable(DeckRC src/main.cpp)
 #target_include_directories(DeckRC PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(DeckRC PUBLIC operations)
