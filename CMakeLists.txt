@@ -35,4 +35,4 @@ target_link_libraries(DeckRC PUBLIC operations)
 target_link_libraries(DeckRC PUBLIC SDL2::SDL2)
 #Clang formatting
 include(ClangFormat)
-add_clang_format_target(format-code ${PROJECT_SOURCE_DIR})  # add "-t format-code" to execute function
+#add_clang_format_target(format-code ${PROJECT_SOURCE_DIR})  # add "-t format-code" to execute function
