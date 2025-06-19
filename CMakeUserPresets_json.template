@@ -1,0 +1,15 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "linux-configuration",
+            "displayName": "User Defined Configuration",
+            "description": "Default User defined.",
+            "inherits": "linux-config",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ]
+}
