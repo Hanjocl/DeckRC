@@ -32,7 +32,7 @@ add_executable(DeckRC src/main.cpp)
 #target_include_directories(DeckRC PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(DeckRC PUBLIC operations)
-target_link_libraries(DeckRC PUBLIC SDL2::SDL2)
+target_link_libraries(DeckRC PRIVATE SDL2::SDL2main SDL2::SDL2)
 #Clang formatting
 include(ClangFormat)
 #add_clang_format_target(format-code ${PROJECT_SOURCE_DIR})  # add "-t format-code" to execute function
