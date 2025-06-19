@@ -19,8 +19,8 @@ int main(int argc, char** args) {
         "my window by hanjo", 
         SDL_WINDOWPOS_UNDEFINED, 
         SDL_WINDOWPOS_UNDEFINED, 
-        300, 
-        200, 
+        800, 
+        400, 
         SDL_WINDOW_SHOWN
     );
 
