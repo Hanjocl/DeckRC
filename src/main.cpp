@@ -4,8 +4,6 @@
 #include <unistd.h>
 #include <deque>
 #include <SDL.h>
-#include "operations.h"
-#include "dog.h"
 
 int main(int argc, char** args) {
     // init

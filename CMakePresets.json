@@ -5,18 +5,17 @@
             "name": "base-config",
             "displayName": "Base Configuration",
             "description": "Sets some standard configuration options.",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-            }
+            "binaryDir": "${sourceDir}/build/${presetName}"
         },
 
         {
             "name": "windows-config",
             "displayName": "Windows Configuration",
             "description": "additional Windows Configurations.",
-            "inherits": "base-config"
+            "inherits": "base-config",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
         },
 
         {
