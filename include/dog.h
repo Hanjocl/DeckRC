@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+
 class Dog {
  public:
   explicit Dog(std::string name_param);
