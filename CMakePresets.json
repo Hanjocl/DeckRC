@@ -2,15 +2,28 @@
     "version": 8,
     "configurePresets": [
         {
-            "name": "Default Toolchain Configure",
-            "displayName": "Default Toolchain Configure",
-            "description": "Sets Ninja generator, build and install directory",
-            "generator": "Ninja",
+            "name": "base-config",
+            "displayName": "Base Configuration",
+            "description": "Sets some standard configuration options.",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
             }
+        },
+
+        {
+            "name": "windows-config",
+            "displayName": "Windows Configuration",
+            "description": "additional Windows Configurations.",
+            "inherits": "base-config"
+        },
+
+        {
+            "name": "linux-config",
+            "displayName": "Linux Configuration",
+            "description": "additional Linux Configuration.",
+            "inherits": "base-config"
         }
     ]
 }

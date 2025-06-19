@@ -13,7 +13,7 @@ message(STATUS "PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 message(STATUS "VCPKG_PATH: ${CMAKE_TOOLCHAIN_FILE}")
 
 find_package(SDL2 CONFIG REQUIRED)
-# find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED REQUIRED COMPONENTS Core)
 # include_directories(DeckRC ${SDL2_INCLUDE_DIRS})
 
 # if (NOT SDL2_FOUND)
@@ -33,6 +33,7 @@ add_executable(DeckRC src/main.cpp)
 
 target_link_libraries(DeckRC PUBLIC operations)
 target_link_libraries(DeckRC PRIVATE SDL2::SDL2main SDL2::SDL2)
+target_link_libraries(DeckRC PRIVATE Qt6::Core)
 #Clang formatting
 include(ClangFormat)
 #add_clang_format_target(format-code ${PROJECT_SOURCE_DIR})  # add "-t format-code" to execute function
