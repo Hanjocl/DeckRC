@@ -1,6 +1,14 @@
 {
   "dependencies": [
     "sdl2",
-    "qtbase"
+    "qtdeclarative",
+    "qtbase",
+    "qttools",
+    "qt5compat",
+    "qtlanguageserver",
+    "qtapplicationmanager",
+    "qtdoc",
+    "qtinterfaceframework",
+    "qtpositioning"
   ]
 }

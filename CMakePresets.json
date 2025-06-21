@@ -8,7 +8,8 @@
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
                 "CONFIG_NAME": "${presetName}"
-            }
+            },
+            "hidden": true
         },
 
         {
@@ -17,9 +18,20 @@
             "description": "additional Windows Configurations.",
             "inherits": "base-config",
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "VCPKG_INSTALL_OPTIONS": "--x-buildtrees-root=C:/bt"
             },
             "hidden": true
+        },
+        
+        {
+            "name": "windows-config-debug",
+            "displayName": "Windows Debug Configuration",
+            "description": "additional Windows Debug Configurations",
+            "inherits": "base-windows-config",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
         },
 
         {
@@ -32,12 +44,13 @@
 
         {
             "name": "linux-config-debug",
-            "displayName": "Linux Configuration",
+            "displayName": "Linux Debug Configuration",
             "description": "additional Linux Configuration.",
             "inherits": "base-config",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
-            }
+            },
+            "hidden": true
         }
     ]
 }
