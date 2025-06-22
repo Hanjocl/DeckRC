@@ -15,7 +15,7 @@
         {
             "name": "base-windows-config",
             "displayName": "Windows Configuration",
-            "description": "additional Windows Configurations.",
+            "description": "Windows Specific Base Configurations.",
             "inherits": "base-config",
             "cacheVariables": {
             },
@@ -35,7 +35,7 @@
         {
             "name": "base-linux-config",
             "displayName": "Linux Configuration",
-            "description": "additional Linux Configuration.",
+            "description": "Linux Specific Base Configuration.",
             "inherits": "base-config",
             "hidden": true
         },

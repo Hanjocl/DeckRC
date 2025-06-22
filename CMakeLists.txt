@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(DeckRC
-        VERSION 0.0.1
+        VERSION 0.1
         DESCRIPTION "DeckRC - A Decky Plugin for Remote Control"
         LANGUAGES CXX
 )
@@ -8,20 +8,21 @@ project(DeckRC
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED ON)
 
+message(STATUS "Project Name: ${PROJECT_NAME}")
 message(STATUS "Config: ${CONFIG_NAME}")
 message(STATUS "Source Dir: ${CMAKE_SOURCE_DIR}")
 message(STATUS "Build Dir: ${CMAKE_BINARY_DIR}")
 add_compile_definitions(CONFIG_NAME="${CONFIG_NAME}")
 
-#find_package(SDL2 REQUIRED)
+find_package(SDL2 REQUIRED)
 find_package(Qt6 6.8.3 REQUIRED COMPONENTS Core GUi Quick)
 
 qt_standard_project_setup()
-qt6_add_executable(${PROJECT_NAME}
+qt_add_executable(${PROJECT_NAME}
     src/main.cpp
 )
 
-qt6_add_qml_module(${PROJECT_NAME}
+qt_add_qml_module(${PROJECT_NAME}
     URI ${PROJECT_NAME}
     VERSION 1.0
     QML_FILES
@@ -35,7 +36,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-#target_link_libraries(DeckRC PRIVATE SDL2::SDL2main SDL2::SDL2)
+target_link_libraries(DeckRC PRIVATE SDL2::SDL2main SDL2::SDL2)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE Qt6::Core
     PRIVATE Qt6::Gui
@@ -48,7 +49,7 @@ target_link_libraries(${PROJECT_NAME}
 
 include(GNUInstallDirs)
 install(TARGETS ${PROJECT_NAME}
-    BUNDLE DESTINATION  ${CMAKE_BINARY_DIR}
+    BUNDLE DESTINATION  .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
