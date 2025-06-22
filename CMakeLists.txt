@@ -10,18 +10,19 @@ set(CXX_STANDARD_REQUIRED ON)
 
 message(STATUS "Config: ${CONFIG_NAME}")
 message(STATUS "Source Dir: ${CMAKE_SOURCE_DIR}")
+message(STATUS "Build Dir: ${CMAKE_BINARY_DIR}")
 add_compile_definitions(CONFIG_NAME="${CONFIG_NAME}")
 
 #find_package(SDL2 REQUIRED)
 find_package(Qt6 6.8.3 REQUIRED COMPONENTS Core GUi Quick)
 
 qt_standard_project_setup()
-qt6_add_executable(DeckRC
+qt6_add_executable(${PROJECT_NAME}
     src/main.cpp
 )
 
 qt6_add_qml_module(${PROJECT_NAME}
-    URI ${CONFIG_NAME}
+    URI ${PROJECT_NAME}
     VERSION 1.0
     QML_FILES
         src/QML/Main.qml
@@ -35,10 +36,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 #target_link_libraries(DeckRC PRIVATE SDL2::SDL2main SDL2::SDL2)
-target_link_libraries(DeckRC PRIVATE
-        Qt6::Core
-        Qt6::Gui
-        Qt6::Quick
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE Qt6::Core
+    PRIVATE Qt6::Gui
+    PRIVATE Qt6::Quick
 )
 
 #Clang formatting
@@ -47,7 +48,7 @@ target_link_libraries(DeckRC PRIVATE
 
 include(GNUInstallDirs)
 install(TARGETS ${PROJECT_NAME}
-    BUNDLE DESTINATION "C:/Dev/Github/DeckRC/build"
+    BUNDLE DESTINATION  ${CMAKE_BINARY_DIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
