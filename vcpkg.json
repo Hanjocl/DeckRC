@@ -5,10 +5,6 @@
     "qtbase",
     "qttools",
     "qt5compat",
-    "qtlanguageserver",
-    "qtapplicationmanager",
-    "qtdoc",
-    "qtinterfaceframework",
-    "qtpositioning"
+    "qtactiveqt"
   ]
 }

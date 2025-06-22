@@ -18,8 +18,6 @@
             "description": "additional Windows Configurations.",
             "inherits": "base-config",
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "VCPKG_INSTALL_OPTIONS": "--x-buildtrees-root=C:/bt"
             },
             "hidden": true
         },
