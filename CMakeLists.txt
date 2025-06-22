@@ -15,7 +15,7 @@ message(STATUS "Build Dir: ${CMAKE_BINARY_DIR}")
 add_compile_definitions(CONFIG_NAME="${CONFIG_NAME}")
 
 find_package(SDL2 REQUIRED)
-find_package(Qt6 6.8.3 REQUIRED COMPONENTS Core GUi Quick)
+find_package(Qt6 6.8.3 REQUIRED COMPONENTS Core Gui Quick)
 
 qt_standard_project_setup()
 qt_add_executable(${PROJECT_NAME}
@@ -36,7 +36,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-target_link_libraries(DeckRC PRIVATE SDL2::SDL2main SDL2::SDL2)
+target_link_libraries(DeckRC PRIVATE SDL2::SDL2)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE Qt6::Core
     PRIVATE Qt6::Gui
