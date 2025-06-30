@@ -17,7 +17,7 @@
             "inherits": "windows-config-debug",
             "generator": "Visual Studio 17 2022",
             "cacheVariables": {
-                "CMAKE_PREFIX_PATH": "C:/Dev/SDL2"
+                "CMAKE_PREFIX_PATH": "C:/Dev/SDL2/"
             }
         }
     

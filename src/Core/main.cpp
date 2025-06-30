@@ -1,12 +1,18 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickStyle>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
+    qDebug() << "Hello Q!";
     QGuiApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/DeckRC/src/QML/Main.qml"));
+
+    
+    const QUrl url(QStringLiteral("qrc:/DeckRC/Main.qml"));
+    qDebug() << "Trying to load:" << url;
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
