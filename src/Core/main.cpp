@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     
-    const QUrl url(QStringLiteral("qrc:/DeckRC/Main.qml"));
+    const QUrl url(QStringLiteral("qrc:/DeckRC/src/UI/Screens/Main.qml"));
     qDebug() << "Trying to load:" << url;
 
     QObject::connect(
