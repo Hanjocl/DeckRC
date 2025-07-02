@@ -1,9 +1,16 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-//#include <controller.h>
+#include <iostream>
+#include "test.h"
+#include "inputController.h"
 
-int main(int argc, char *argv[])
-{
+
+int main(int argc, char *argv[]) {
+    int result = adder(2, 3);  // Example usage
+    std::cout << "Adder result with STD: " << result << std::endl;
+    std::cout.flush();
+    qDebug() << "Adder result with qDebug:" << result;
+
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;

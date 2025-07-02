@@ -8,6 +8,9 @@ project(AppDeckRC
 
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 ### END OF STANDARD CMAKE PROJECT SETUP
 
 ### CUSTOM MESSAGES
@@ -15,14 +18,16 @@ message(STATUS "Project Name: ${PROJECT_NAME}")
 message(STATUS "Config: ${CONFIG_NAME}")
 message(STATUS "Source Dir: ${CMAKE_SOURCE_DIR}")
 message(STATUS "Build Dir: ${CMAKE_BINARY_DIR}")
+message(STATUS "Install Lib Dir: ${CMAKE_INSTALL_LIBDIR}")
 ### END OF CUSTOM MESSAGES
 
 
 ### LIBRARIES / PACKAGES
 find_package(SDL2 REQUIRED)
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Quick Qml)
 
-add_subdirectory(libs/Controller)
+add_subdirectory("lib/Test")
+add_subdirectory("lib/Controller")
 ### END OF LIBRARIES / PACKAGES
 
 
@@ -32,6 +37,9 @@ qt_add_executable(${PROJECT_NAME}
     src/Core/main.cpp
 )
 
+qt_policy(SET QTP0004 NEW)
+qt_policy(SET QTP0001 OLD)
+
 qt_add_qml_module(${PROJECT_NAME}
     URI DeckRC
     VERSION 1.0
@@ -39,30 +47,35 @@ qt_add_qml_module(${PROJECT_NAME}
         src/UI/Main.qml
         src/UI/ChannelSettings.qml
 )
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
-)
+# if(WIN32)
+#     set_target_properties(${PROJECT_NAME} PROPERTIES
+#         MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+#         MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+#         MACOSX_BUNDLE TRUE
+#         WIN32_EXECUTABLE TRUE
+#     )
+# endif()
 ### END OF  QT QUICK SETUP
 
 
 ### LINKING
 target_link_libraries(${PROJECT_NAME} 
-    PUBLIC controller
+    PUBLIC TestLib
+)
+target_link_libraries(${PROJECT_NAME} 
+    PUBLIC ControllerLib
 )
 
 target_link_libraries(${PROJECT_NAME} 
-    PRIVATE SDL2::SDL2
+    PUBLIC SDL2::SDL2
 )
 target_link_libraries(${PROJECT_NAME}
     PUBLIC Qt6::Core
+    PUBLIC Qt6::Widgets
     PUBLIC Qt6::Gui
     PUBLIC Qt6::Quick
+    PUBLIC Qt6::Qml
 )
-
 ### END OF LINKING
 
 

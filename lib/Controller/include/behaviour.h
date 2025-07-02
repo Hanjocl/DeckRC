@@ -2,8 +2,8 @@
 // Created by miantao on 26-6-25.
 //
 
-#ifndef INPUT_BEHAVIOR_H
-#define INPUT_BEHAVIOR_H
+#ifndef BEHAVIOR_H
+#define BEHAVIOR_H
 
 #include <vector>
 #include <SDL.h>
@@ -64,4 +64,4 @@ protected:
 
 
 
-#endif //INPUT_BEHAVIOR_H
+#endif //BEHAVIOR_H

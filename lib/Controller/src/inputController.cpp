@@ -2,7 +2,7 @@
 // Created by miantao on 25-6-25.
 //
 
-#include "controller.h"
+#include "inputController.h"
 
 #include <algorithm>
 #include <SDL_events.h>

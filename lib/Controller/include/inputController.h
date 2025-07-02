@@ -2,8 +2,8 @@
 // Created by miantao on 25-6-25.
 //
 
-#ifndef INPUTS_H
-#define INPUTS_H
+#ifndef INPUTCONTROLLER_H
+#define INPUTCONTROLLER_H
 #include "behaviour.h"
 
 #include <vector>
@@ -178,4 +178,4 @@ public:
 
 
 
-#endif //INPUTS_H
+#endif //INPUTCONTROLLER_H
