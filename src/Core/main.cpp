@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <iostream>
 #include "test.h"
-#include "inputController.h"
+// #include "inputController.h"
 
 
 int main(int argc, char *argv[]) {
