@@ -2,15 +2,13 @@
 // Created by miantao on 26-6-25.
 //
 
-#include "behaviour.h"
+#include "behavior.h"
 
-#include <iostream>
-#include <ranges>
 #include <stdexcept>
 
 InputBehavior::InputBehavior(int channel_index, double value, InputMode mode) : channel_index(channel_index), value(value), mode(mode) {}
 
-KeyBehavior::KeyBehavior(int channel_index, double value, const SDL_KeyCode &key, InputMode mode) : key(key), InputBehavior(channel_index, value, mode) {}
+KeyBehavior::KeyBehavior(int channel_index, double value, const SDL_Keycode &key, InputMode mode) : key(key), InputBehavior(channel_index, value, mode) {}
 
 ButtonBehavior::ButtonBehavior(int channel_index, double value, Uint8 button, Uint16 which, InputMode mode) : button(button), which(which), InputBehavior(channel_index, value, mode) {}
 

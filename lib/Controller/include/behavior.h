@@ -33,7 +33,7 @@ protected:
 
 class KeyBehavior : public InputBehavior {
 public:
-    KeyBehavior(int channel_index, double value, const SDL_KeyCode &key, InputMode mode=InputMode::set);
+    KeyBehavior(int channel_index, double value, const SDL_Keycode &key, InputMode mode=InputMode::set);
 
     SDL_Keycode key;
 };

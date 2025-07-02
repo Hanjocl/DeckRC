@@ -115,7 +115,7 @@ void Inputs::keyUp(const SDL_Keycode &key) {
 
 void Inputs::controllerButtonDown(const Uint8 &button, const SDL_JoystickID &which) {
     for (const ButtonBehavior &button_behavior : button_down_behaviors) {
-        if (button == button_behavior.button and which == button_behavior.which) {
+        if (button == button_behavior.button && which == button_behavior.which) {
             button_behavior(channels_raw);
         }
     }
@@ -123,7 +123,7 @@ void Inputs::controllerButtonDown(const Uint8 &button, const SDL_JoystickID &whi
 
 void Inputs::controllerButtonUp(const Uint8 &button, const SDL_JoystickID &which) {
     for (const ButtonBehavior &button_behavior : button_up_behaviors) {
-        if (button == button_behavior.button and which == button_behavior.which) {
+        if (button == button_behavior.button && which == button_behavior.which) {
             button_behavior(channels_raw);
         }
     }
@@ -131,7 +131,7 @@ void Inputs::controllerButtonUp(const Uint8 &button, const SDL_JoystickID &which
 
 void Inputs::controllerAxisMotion(const Uint8 &axis, const Sint16 &value, const SDL_JoystickID &which) {
     for (AxisBehavior &axis_behavior : axis_behaviors) {
-        if (axis == axis_behavior.button and which == axis_behavior.which) {
+        if (axis == axis_behavior.button && which == axis_behavior.which) {
             axis_behavior(channels_raw, value);
         }
     }

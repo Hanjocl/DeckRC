@@ -4,7 +4,7 @@
 
 #ifndef INPUTCONTROLLER_H
 #define INPUTCONTROLLER_H
-#include "behaviour.h"
+#include "behavior.h"
 
 #include <vector>
 #include <SDL.h>
