@@ -26,6 +26,10 @@ public:
 
     int channel_index;
 
+    // Getter functions for protected members
+    double getValue() const { return value; }
+    InputMode getMode() const { return mode; }
+
 protected:
     InputMode mode;
     double value; // = std::numeric_limits<ChannelDataType>::max();
@@ -53,12 +57,11 @@ public:
     AxisBehavior(int channel_index, double value, Uint8 button, Uint16 which, AxisAsButton as_button=AxisAsButton::no, double threshold = 0, InputMode mode=InputMode::set);
 
     void operator() (std::vector<ChannelDataType> &channels, Sint32 value);
+    AxisAsButton as_button;    // 0 means not digital, +1 means in response to rising signal, -1 means in response to falling signal
+    double threshold;
 
 protected:
-    AxisAsButton as_button;    // 0 means not digital, +1 means in response to rising signal, -1 means in response to falling signal
-
     // for digital input
-    double threshold;
     double previous_value_scaled=0;
 };
 

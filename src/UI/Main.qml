@@ -91,9 +91,8 @@ ApplicationWindow {
                             ch_id: model.index    
                         }
                     }
-
                 }
-               
+
             }            
         }         
 

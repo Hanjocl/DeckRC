@@ -21,7 +21,6 @@ RowLayout {
 
     property var behaviour_types: ["Toggle", "Toggle (Symetrical)", "Tap", "Raw Axis"];
     property var selected_behaviour: -1;
-
     property int target_value: 0;
     property string input_label: "" 
     
@@ -91,17 +90,12 @@ RowLayout {
     
     ComboBox {
         id: comboBox
-        Layout.preferredHeight: colum_base.height
-
-        displayText: ch_settings.selected_behaviour === -1  ? "Select Behaviour" : model[currentIndex]
-        // onActivated: backend.modifier = currentValue         // TODO: Retrive value from back end
-        Component.onCompleted: currentIndex = ch_settings.selected_behaviour
+        Layout.preferredHeight: column_base.height
+        displayText: ch_settings.selected_behaviour === -1 ? "Select Behaviour" : model[currentIndex]
         currentIndex: ch_settings.selected_behaviour
         model: ch_settings.behaviour_types
-
         onCurrentIndexChanged: {
             ch_settings.selected_behaviour = currentIndex
-            console.log("Selected behaviour enum value:", model[currentIndex]);
         }
     }
 
@@ -147,6 +141,23 @@ RowLayout {
             }
             Accessible.name: "Increase target value"
             Accessible.description: "Increases target value by 25"
+        }
+    }
+
+    Button {
+        id: apply
+        Layout.preferredHeight: column_base.height
+        text: "Apply"
+        onClicked: {
+            inputController.applyChannelSettings(
+                ch_settings.ch_id,
+                ch_settings.bias,
+                ch_settings.limit,
+                ch_settings.bound,
+                ch_settings.selected_behaviour,
+                ch_settings.target_value,
+                ch_settings.input_label
+            )
         }
     }
     

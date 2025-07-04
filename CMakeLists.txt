@@ -35,6 +35,8 @@ add_subdirectory("lib/Controller")
 qt_standard_project_setup()
 qt_add_executable(${PROJECT_NAME}
     src/Core/main.cpp
+    src/Core/inputControllerWrapper.cpp
+    src/Core/inputControllerWrapper.h
 )
 
 qt_policy(SET QTP0004 NEW)

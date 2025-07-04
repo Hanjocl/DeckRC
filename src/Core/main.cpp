@@ -1,14 +1,16 @@
+#define SDL_MAIN_HANDLED
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <iostream>
 #include "test.h"
-// #include "inputController.h"
-
+#include "inputController.h"
 
 int main(int argc, char *argv[]) {
+    std::cout << "Launching DeckRC " << std::endl;
+
     int result = adder(2, 3);  // Example usage
     std::cout << "Adder result with STD: " << result << std::endl;
-    std::cout.flush();
     qDebug() << "Adder result with qDebug:" << result;
 
     QGuiApplication app(argc, argv);
@@ -23,5 +25,10 @@ int main(int argc, char *argv[]) {
         Qt::QueuedConnection);
     engine.load(url);
 
-    return app.exec();
+    int result_app = app.exec();
+
+    // Do stuff after shutting down app
+
+    std::cout << "Closing App... " << std::endl;
+    return result_app;
 }

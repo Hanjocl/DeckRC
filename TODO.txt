@@ -3,6 +3,3 @@
     Check out Grok hehe. Learn how to do it and make a manager / Model object (or class?) basically 
 
 -----------------------------------------------------------------------------------------------------
-2. Build Tao controller Library from the ground up to see what is going wrong with it?
-
-    Probably a issue wit include SDL and it rename the main() function to SDL_Main causing QT to not find main() function

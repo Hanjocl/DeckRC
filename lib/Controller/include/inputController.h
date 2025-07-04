@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <SDL.h>
+#include <string>
 
 enum class ChannelBoundType {
     clamp, free, modulo, loop //, bounce
@@ -29,14 +30,17 @@ public:
 
     std::vector<ChannelBoundType> channel_bounds;
 
+    // Functions for JSON serialization
+    bool saveToJson(const std::string& filename) const;
+    bool loadFromJson(const std::string& filename);
+
 protected:
     std::vector<int> gamepad_indices;
     std::vector<SDL_GameController*> gamepads;
 
     std::vector<ChannelDataType> channels_raw;
-    ChannelDataType channel_bias = 1500;                        // change for RC LINK!
-    ChannelDataType channel_limit = 500;
-    // std::vector<ChannelDataType> channel_biases;
+    std::vector<ChannelDataType> channel_biases;  // Per-channel biases
+    std::vector<ChannelDataType> channel_limits;  // Per-channel limits
 
     std::vector<InputBehavior> cycle_behaviors;
     std::vector<KeyBehavior> key_down_behaviors;
@@ -175,7 +179,5 @@ public:
     }
 
 };
-
-
 
 #endif //INPUTCONTROLLER_H
