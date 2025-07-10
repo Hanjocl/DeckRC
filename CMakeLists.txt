@@ -35,8 +35,8 @@ add_subdirectory("lib/Controller")
 qt_standard_project_setup()
 qt_add_executable(${PROJECT_NAME}
     src/Core/main.cpp
-    src/Core/inputControllerWrapper.cpp
-    src/Core/inputControllerWrapper.h
+    src/Core/inputControllerModel.h
+    src/Core/inputControllerModel.cpp
 )
 
 qt_policy(SET QTP0004 NEW)
@@ -48,7 +48,13 @@ qt_add_qml_module(${PROJECT_NAME}
     QML_FILES
         src/UI/Main.qml
         src/UI/ChannelSettings.qml
+
+    SOURCES
+        src/Core/inputControllerModel.h
+        src/Core/inputControllerModel.cpp
 )
+
+target_include_directories(AppDeckRC PRIVATE "src/Core/")
 # if(WIN32)
 #     set_target_properties(${PROJECT_NAME} PROPERTIES
 #         MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}

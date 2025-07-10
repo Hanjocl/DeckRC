@@ -7,10 +7,10 @@ RowLayout {
     id: ch_settings
     height:100
    
-    property int ch_id: -1
-    property int ch_current_value: 1500
-    property int ch_min: 1000
-    property int ch_max: 2000
+    property real ch_id: -1
+    property real ch_current_value: 69
+    property real ch_min: -100
+    property real ch_max: 100
 
     enum Behaviours {
         Toggle,
@@ -42,16 +42,17 @@ RowLayout {
 
         Item {
             id: progressBar
-            Layout.preferredWidth: 200
+            Layout.preferredWidth: 400
+            width:parent.width
             
             ProgressBar {
                 id: raw_progressBar
-                anchors.fill: parent
-                height: parent.height
+                anchors.centerIn: parent
+                width:parent.width             
 
-                    from: ch_settings.ch_min
-                    to: ch_settings.ch_max
-                    value: ch_settings.ch_current_value
+                from: ch_settings.ch_min
+                to: ch_settings.ch_max
+                value: ch_settings.ch_current_value
             }
 
             // display min bound
@@ -64,9 +65,11 @@ RowLayout {
 
             // display current value
             Text {
-                anchors.centerIn: raw_progressBar
-                text: raw_progressBar.value
+                anchors.top: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: ch_settings.ch_current_value
                 color: Universal.baseHighColor
+                font.weight: Font.Bold
                 font.pointSize: 12
             }
 
@@ -77,6 +80,7 @@ RowLayout {
                 color: Universal.baseMediumHighColor
                 font.pointSize: 12
             }
+
         }
     }    
 
@@ -90,7 +94,7 @@ RowLayout {
     
     ComboBox {
         id: comboBox
-        Layout.preferredHeight: column_base.height
+        Layout.preferredHeight: colum_base.height
         displayText: ch_settings.selected_behaviour === -1 ? "Select Behaviour" : model[currentIndex]
         currentIndex: ch_settings.selected_behaviour
         model: ch_settings.behaviour_types
@@ -146,18 +150,10 @@ RowLayout {
 
     Button {
         id: apply
-        Layout.preferredHeight: column_base.height
+        Layout.preferredHeight: colum_base.height
         text: "Apply"
         onClicked: {
-            inputController.applyChannelSettings(
-                ch_settings.ch_id,
-                ch_settings.bias,
-                ch_settings.limit,
-                ch_settings.bound,
-                ch_settings.selected_behaviour,
-                ch_settings.target_value,
-                ch_settings.input_label
-            )
+            // expose methode to level above!
         }
     }
     
