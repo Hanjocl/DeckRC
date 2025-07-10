@@ -89,7 +89,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter
                             id: settings
                             ch_id: model.index    
-                            ch_current_value: InputController.currentValue + model.index*25
+                            ch_current_value: InputController.channelValues[index]
                             ch_min: 1000
                             ch_max: 2000
                         }

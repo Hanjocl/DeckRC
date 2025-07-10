@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Adder result with STD: " << result << std::endl;
     qDebug() << "Adder result with qDebug:" << result;
 
-    if (SDL_Init(SDL_INIT_EVENTS) != 0) {
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cout << "SDL_InitSubSystem Error: " << SDL_GetError() << std::endl;
         return 1;
     }
@@ -29,11 +29,11 @@ int main(int argc, char *argv[]) {
 
     // Create the singleton instance
     inputController.setCurrentValue(1600);
-
+    
     std::cout << "Current Value: " << inputController.currentValue() << std::endl;
-
+    
     engine.rootContext()->setContextProperty("InputController", &inputController);
-
+    
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
@@ -41,10 +41,12 @@ int main(int argc, char *argv[]) {
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.load(url);
-
+        
+    inputController.startPolling(50);
     int result_app = app.exec();
 
     // Do stuff after shutting down app
+    SDL_Quit();
 
     std::cout << "Closing App... " << std::endl;
     return result_app;
