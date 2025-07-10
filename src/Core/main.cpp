@@ -4,6 +4,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <iostream>
+#include <SDL.h>
 #include "test.h"
 #include "inputControllerModel.h"
 
@@ -14,6 +15,10 @@ int main(int argc, char *argv[]) {
     std::cout << "Adder result with STD: " << result << std::endl;
     qDebug() << "Adder result with qDebug:" << result;
 
+    if (SDL_Init(SDL_INIT_EVENTS) != 0) {
+        std::cout << "SDL_InitSubSystem Error: " << SDL_GetError() << std::endl;
+        return 1;
+    }
     
     QGuiApplication app(argc, argv);
 

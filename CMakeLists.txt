@@ -96,3 +96,8 @@ install(TARGETS ${PROJECT_NAME}
 )
 ### END OF SOME QT INSTALL STUFF
 
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "C:/Dev/SDL2/lib/x64/SDL2.dll"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
