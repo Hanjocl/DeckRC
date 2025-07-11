@@ -25,14 +25,14 @@ ApplicationWindow {
     }
 
     property var actionFunctions: ({
-        scan: function() { console.log(actionId + " function called") },
-        connect: function() { console.log("Connect function called") },
-        reset: function() { console.log("Reset function called") },
-        upload: function() { console.log("Upload function called") },
-        download: function() { console.log("Download function called") },
+        capture: function() { InputController.stopPolling(); console.log("capture function called"); },
+        record: function() { InputController.startPolling(); console.log("record function called"); },
+        rc_link: function() { InputController.stopScanning(); console.log("rc_link function called"); },
+        status: function() { console.log("status function called"); },
+        settings: function() { console.log("settings function called"); },
         shutdown: function() {
-            console.log("Shutdown function called")
-            Qt.quit()
+            console.log("Shutdown function called");
+            Qt.quit();
         }
     })
 
@@ -76,23 +76,38 @@ ApplicationWindow {
                 anchors.margins: 10
 
                 ColumnLayout {
+                    id: root_channels
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: parent.height
                     anchors {
                         fill: parent
                     }
 
+                    function handleInputCheckedChanged(checked) {
+                        console.log("Checked state changed:", checked)
+                        if (checked) {
+                            InputController.GetInput();
+                        } else {
+                            InputController.stopScanning();
+                            InputController.startPolling();
+                        }
+                    }
+
                     Repeater {
+                        id: channelRepeater
                         model: 16
     
                         ChannelSettings {
                             Layout.alignment: Qt.AlignHCenter
                             id: settings
                             ch_id: model.index    
-                            ch_current_value: InputController.channelValues[index]
+                            ch_current_value: InputController.channelValues[model.index]
                             ch_min: 1000
                             ch_max: 2000
+                            onInputCheckedChanged: (checked) => root_channels.handleInputCheckedChanged(checked)
                         }
+
+                        
                     }
                 }
 

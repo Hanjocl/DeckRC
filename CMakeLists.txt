@@ -37,6 +37,7 @@ qt_add_executable(${PROJECT_NAME}
     src/Core/main.cpp
     src/Core/inputControllerModel.h
     src/Core/inputControllerModel.cpp
+    src/Core/inputTypes.h
 )
 
 qt_policy(SET QTP0004 NEW)

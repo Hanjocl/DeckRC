@@ -23,7 +23,7 @@ RowLayout {
     property var selected_behaviour: -1;
     property int target_value: 0;
     property string input_label: "" 
-    
+    signal inputCheckedChanged(bool checked)
     
     ColumnLayout {
         id: colum_base
@@ -90,6 +90,9 @@ RowLayout {
         Layout.preferredWidth: 200       
         text: checked ? "Waiting for input..." : ch_settings.input_label === "" ? "Set input" : ch_settings.input_label
         checkable: true
+        onCheckedChanged: {
+            inputCheckedChanged(checked)
+        }
     }
     
     ComboBox {
@@ -152,9 +155,6 @@ RowLayout {
         id: apply
         Layout.preferredHeight: colum_base.height
         text: "Apply"
-        onClicked: {
-            // expose methode to level above!
-        }
     }
     
     Button {

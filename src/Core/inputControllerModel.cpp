@@ -1,13 +1,21 @@
 #include "inputcontrollermodel.h"
+
 #include <QVariantList>
 #include <iostream>
+#include <SDL.h>
 
 InputControllerModel::InputControllerModel(QObject *parent, int amount_channels) 
 : QObject(parent), m_currentValue(0), m_inputs(16), m_channels(16) {
     std::cout << "Setting up Input Controls " << std::endl;
-    m_inputs.addToggle(0, SDLK_a, 100);
-    m_inputs.addToggle(1, SDLK_a, 100);
-    m_inputs.addToggle(2, 0, 0, 100);
+    m_inputs.addAxis(0, 0, 0, 500);
+    m_inputs.addAxis(1, 1, 0, 500);
+    m_inputs.addAxis(2, 2, 0, 500);
+    m_inputs.addAxis(3, 3, 0, 500);
+    m_inputs.addAxis(4, 4, 0, 500);
+    m_inputs.addAxis(5, 5, 0, 500);
+    m_inputs.addToggle(6, SDLK_f, -400);
+    m_inputs.addToggle(7, SDLK_a, 400);
+    m_inputs.addToggle(8, 0, 0, 400);
     connect(&m_timer, &QTimer::timeout, this, &InputControllerModel::updateInputs);
 }
 
@@ -22,8 +30,8 @@ void InputControllerModel::updateInputs() {
     emit channelValuesChanged(); // Notify QML to refresh the ListView
 }
 
-
 void InputControllerModel::startPolling(int intervalHz) {
+    SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
     int intervalMs = 1000 / intervalHz;
     if (!m_timer.isActive()) {
         m_timer.start(intervalMs);
@@ -50,6 +58,87 @@ QVariantList InputControllerModel::channelValues() const {
     return list;
 }
 
+void InputControllerModel::GetInput() {
+    // Stop polling to get a single input event if not already stopped
+    if (m_timer.isActive())
+        stopPolling();
+
+    InputEvent event = detectFirstInputEvent();
+    switch (event.type) {
+        case InputType::Keyboard:
+            std::cout << "Keyboard key: " << SDL_GetKeyName(event.key) << std::endl;
+            break;
+        case InputType::JoystickButton:
+            std::cout << "Joystick button: " << (int)event.joystick_button.button
+                    << " from ID: " << event.joystick_button.joystick_id << std::endl;
+            break;
+        case InputType::JoystickAxis:
+            std::cout << "Joystick axis: " << (int)event.joystick_axis.axis
+                    << " value: " << event.joystick_axis.value
+                    << " from ID: " << event.joystick_axis.joystick_id << std::endl;
+            break;
+        case InputType::None:
+            std::cout << "No input detected.\n";
+            break;
+        }
+
+    // Resume polling after getting the input if not already active
+    if (!m_timer.isActive())
+        startPolling(); 
+}
+
+
+InputEvent InputControllerModel::detectFirstInputEvent() {
+    SDL_Event event;
+
+    scanning = true;
+
+    SDL_WaitEvent(&event);
+
+    while (SDL_PollEvent(&event)) {
+        if (!scanning) {
+            return InputEvent{}; // Return empty event if scanning is stopped
+        }
+
+        InputEvent result;
+        result.raw_event = event;
+
+
+        switch (event.type) {
+            case SDL_KEYDOWN:
+                result.type = InputType::Keyboard;
+                result.key = event.key.keysym.sym;
+                return result;
+            case SDL_JOYBUTTONDOWN:
+                result.type = InputType::JoystickButton;
+                result.joystick_button.button = event.jbutton.button;
+                result.joystick_button.joystick_id = event.jbutton.which;
+                return result;
+            case SDL_JOYAXISMOTION:
+                if (std::abs(event.jaxis.value) > 20000) {
+                    result.type = InputType::JoystickAxis;
+                    result.joystick_axis.axis = event.jaxis.axis;
+                    result.joystick_axis.value = event.jaxis.value;
+                    result.joystick_axis.joystick_id = event.jaxis.which;
+                    return result;
+                }
+                break;
+            default:
+                continue;
+            }
+    }
+}
+
+
+// DEBUGGING
+void InputControllerModel::printChannels(const std::vector<ChannelDataType>& channels) {
+    std::cout << "Channels: ";
+    for (size_t i = 0; i < channels.size(); ++i) {
+        std::cout << channels[i];
+        if (i != channels.size() - 1) std::cout << ", ";
+    }
+    std::cout << std::endl;
+}
 
 
 // TEST
@@ -64,11 +153,6 @@ void InputControllerModel::setCurrentValue(int value) {
     }
 }
 
-void InputControllerModel::printChannels(const std::vector<ChannelDataType>& channels) {
-    std::cout << "Channels: ";
-    for (size_t i = 0; i < channels.size(); ++i) {
-        std::cout << channels[i];
-        if (i != channels.size() - 1) std::cout << ", ";
-    }
-    std::cout << std::endl;
-}
+
+
+
