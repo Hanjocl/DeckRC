@@ -7,16 +7,34 @@
 InputControllerModel::InputControllerModel(QObject *parent, int amount_channels) 
 : QObject(parent), m_currentValue(0), m_inputs(16), m_channels(16) {
     std::cout << "Setting up Input Controls " << std::endl;
-    m_inputs.addAxis(0, 0, 0, 500);
+    //m_inputs.addAxis(0, 0, 0, 500);
     m_inputs.addAxis(1, 1, 0, 500);
     m_inputs.addAxis(2, 2, 0, 500);
     m_inputs.addAxis(3, 3, 0, 500);
     m_inputs.addAxis(4, 4, 0, 500);
     m_inputs.addAxis(5, 5, 0, 500);
-    m_inputs.addToggle(6, SDLK_f, -400);
-    m_inputs.addToggle(7, SDLK_a, 400);
+    m_inputs.addToggle(0, SDLK_f, -400);
+    m_inputs.addToggle(0, SDLK_a, 400);
     m_inputs.addToggle(8, 0, 0, 400);
     connect(&m_timer, &QTimer::timeout, this, &InputControllerModel::updateInputs);
+}
+
+InputControllerModel::~InputControllerModel() {
+    std::cout << "Cleaning up Input Controls " << std::endl;
+    stopPolling();
+    SDL_Quit();
+}
+
+bool InputControllerModel::init() {
+
+    // Initialize any additional resources or settings if needed
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+        std::cout << "SDL_InitSubSystem Error: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    std::cout << "InputControllerModel initialized." << std::endl;
+    return true;
+
 }
 
 void InputControllerModel::updateInputs() {
@@ -58,78 +76,6 @@ QVariantList InputControllerModel::channelValues() const {
     return list;
 }
 
-void InputControllerModel::GetInput() {
-    // Stop polling to get a single input event if not already stopped
-    if (m_timer.isActive())
-        stopPolling();
-
-    InputEvent event = detectFirstInputEvent();
-    switch (event.type) {
-        case InputType::Keyboard:
-            std::cout << "Keyboard key: " << SDL_GetKeyName(event.key) << std::endl;
-            break;
-        case InputType::JoystickButton:
-            std::cout << "Joystick button: " << (int)event.joystick_button.button
-                    << " from ID: " << event.joystick_button.joystick_id << std::endl;
-            break;
-        case InputType::JoystickAxis:
-            std::cout << "Joystick axis: " << (int)event.joystick_axis.axis
-                    << " value: " << event.joystick_axis.value
-                    << " from ID: " << event.joystick_axis.joystick_id << std::endl;
-            break;
-        case InputType::None:
-            std::cout << "No input detected.\n";
-            break;
-        }
-
-    // Resume polling after getting the input if not already active
-    if (!m_timer.isActive())
-        startPolling(); 
-}
-
-
-InputEvent InputControllerModel::detectFirstInputEvent() {
-    SDL_Event event;
-
-    scanning = true;
-
-    SDL_WaitEvent(&event);
-
-    while (SDL_PollEvent(&event)) {
-        if (!scanning) {
-            return InputEvent{}; // Return empty event if scanning is stopped
-        }
-
-        InputEvent result;
-        result.raw_event = event;
-
-
-        switch (event.type) {
-            case SDL_KEYDOWN:
-                result.type = InputType::Keyboard;
-                result.key = event.key.keysym.sym;
-                return result;
-            case SDL_JOYBUTTONDOWN:
-                result.type = InputType::JoystickButton;
-                result.joystick_button.button = event.jbutton.button;
-                result.joystick_button.joystick_id = event.jbutton.which;
-                return result;
-            case SDL_JOYAXISMOTION:
-                if (std::abs(event.jaxis.value) > 20000) {
-                    result.type = InputType::JoystickAxis;
-                    result.joystick_axis.axis = event.jaxis.axis;
-                    result.joystick_axis.value = event.jaxis.value;
-                    result.joystick_axis.joystick_id = event.jaxis.which;
-                    return result;
-                }
-                break;
-            default:
-                continue;
-            }
-    }
-}
-
-
 // DEBUGGING
 void InputControllerModel::printChannels(const std::vector<ChannelDataType>& channels) {
     std::cout << "Channels: ";
@@ -151,6 +97,28 @@ void InputControllerModel::setCurrentValue(int value) {
         m_currentValue = value;
         emit currentValueChanged();
     }
+}
+
+
+void InputControllerModel::injectKey(int qtKey, const QString& text) {
+    // Emit signal to QML
+    emit keyEvent(text, qtKey);
+
+    
+    // Optionally inject to SDL
+    SDL_Event sdlEvent{};
+    sdlEvent.type = SDL_KEYDOWN;
+    sdlEvent.key.state = SDL_PRESSED;
+    sdlEvent.key.repeat = 0;
+    
+    // Convert text to SDL key symbol (very basic mapping)
+    SDL_Keycode keycode = SDL_GetKeyFromName(text.toUtf8().constData());
+    if (keycode == SDLK_UNKNOWN)
+    keycode = static_cast<SDL_Keycode>(qtKey);  // fallback
+
+    sdlEvent.key.keysym.sym = keycode;
+    qDebug() << "Injecting key:" << text << "with SDL keycode:" << keycode;
+    SDL_PushEvent(&sdlEvent);
 }
 
 

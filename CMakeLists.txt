@@ -38,6 +38,10 @@ qt_add_executable(${PROJECT_NAME}
     src/Core/inputControllerModel.h
     src/Core/inputControllerModel.cpp
     src/Core/inputTypes.h
+    src/Core/ControllerModel/Worker.h
+    src/Core/ControllerModel/Worker.cpp
+    src/Core/ControllerModel/controllerModel.h
+    src/Core/ControllerModel/controllerModel.cpp
 )
 
 qt_policy(SET QTP0004 NEW)
@@ -53,7 +57,11 @@ qt_add_qml_module(${PROJECT_NAME}
     SOURCES
         src/Core/inputControllerModel.h
         src/Core/inputControllerModel.cpp
-)
+        src/Core/ControllerModel/Worker.h
+        src/Core/ControllerModel/Worker.cpp
+        src/Core/ControllerModel/controllerModel.h
+        src/Core/ControllerModel/controllerModel.cpp
+    )
 
 target_include_directories(AppDeckRC PRIVATE "src/Core/")
 # if(WIN32)

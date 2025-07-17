@@ -9,7 +9,7 @@ ApplicationWindow {
     title: qsTr("DeckRC - Debug 0.1")
 
     Universal.theme: Universal.Dark
-        
+    
     ListModel {
         id: leftButtonsModel
         ListElement { text: "Capture"; actionId: "capture" }
@@ -26,8 +26,8 @@ ApplicationWindow {
 
     property var actionFunctions: ({
         capture: function() { InputController.stopPolling(); console.log("capture function called"); },
-        record: function() { InputController.startPolling(); console.log("record function called"); },
-        rc_link: function() { InputController.stopScanning(); console.log("rc_link function called"); },
+        record: function() { InputController.startPolling();  console.log("record function called"); },
+        rc_link: function() { inputArea.forceActiveFocus(); console.log("rc_link function called"); },
         status: function() { console.log("status function called"); },
         settings: function() { console.log("settings function called"); },
         shutdown: function() {
@@ -68,12 +68,45 @@ ApplicationWindow {
             Layout.fillHeight: true
 
             Rectangle {
+                id: inputArea
                 width: parent.width
                 height: parent.height
                 border.color: "white"
                 color: "transparent"
                 border.width: 3
                 anchors.margins: 10
+
+                focus: true
+                Keys.onPressed: function(event) {
+                    InputController.injectKey(event.key, event.text)
+                }
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "grey"
+
+                    Column {
+                        anchors.centerIn: parent
+                        spacing: 10
+
+                        Text {
+                            id: display
+                            text: "Press a key"
+                            font.pointSize: 22
+                            color: "blue"
+                        }
+                    }
+                }
+                
+                
+
+                Connections {
+                    target: InputController
+                    function onKeyEvent(key, qtKeyCode) {
+                        display.text = "Key: " + key + " (code: " + qtKeyCode + ")"
+                    }
+                }
+                
 
                 ColumnLayout {
                     id: root_channels
@@ -89,7 +122,7 @@ ApplicationWindow {
                             InputController.GetInput();
                         } else {
                             InputController.stopScanning();
-                            InputController.startPolling();
+                            InaputController.startPolling();
                         }
                     }
 

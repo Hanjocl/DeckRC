@@ -17,6 +17,9 @@ class InputControllerModel : public QObject {
 
 public:
     explicit InputControllerModel(QObject *parent = nullptr, int amount_channels = 16);
+    ~InputControllerModel();
+
+    bool init();
 
     enum class ChannelModes {
         KEYBOARD_KEY_HOLD,
@@ -52,9 +55,8 @@ public:
     // UI COMMANDS
     // void GetInput();
     // void ApplyConfigToChannel(int channel, int value, ChannelModes mode, SDL_keycode key = nullptr, int JoystickID = nullptr, int JoystickInput)
-    Q_INVOKABLE void GetInput();
     Q_INVOKABLE void stopScanning() { scanning = false; }
-    InputEvent detectFirstInputEvent();
+    Q_INVOKABLE void injectKey(int qtKey, const QString& text);
 
     //Testing
     int currentValue() const;
@@ -63,6 +65,7 @@ public:
 signals:
     void currentValueChanged();
     void channelValuesChanged();
+    void keyEvent(QString key, int qtKeyCode);
 
 private:
     // Library specific
