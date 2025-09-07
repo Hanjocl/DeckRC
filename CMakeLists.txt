@@ -28,8 +28,10 @@ message(STATUS "Toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 find_package(SDL2 REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Quick Qml)
 
-add_subdirectory("lib/Test")
 add_subdirectory("lib/Controller")
+add_subdirectory("modules/OpenIPC-QML-Element")
+add_subdirectory("modules/CRSF-USB-Host")
+
 ### END OF LIBRARIES / PACKAGES
 
 
@@ -78,12 +80,18 @@ target_include_directories(AppDeckRC PUBLIC "src/Core/")
 
 
 ### LINKING
-target_link_libraries(${PROJECT_NAME} PUBLIC
-    TestLib
-)
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     ControllerLib
 )
+
+target_link_libraries(${PROJECT_NAME} PUBLIC 
+    CRSF_USB_Host
+)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC 
+    OpenIPC_QML_Element
+)
+
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     ${SDL2_LIBRARIES}

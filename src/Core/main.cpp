@@ -5,18 +5,23 @@
 #include <QQmlContext>
 #include <iostream>
 #include <SDL.h>
-#include "test.h"
+
 #include "inputControllerModel.h"
 #include "ControllerModel/controllerModel.h"
 
+#include "crsf.h"
+
 int main(int argc, char *argv[]) {
     std::cout << "Launching DeckRC " << std::endl;
-    // TESTING
-    int result = adder(2, 3);  // Example usage
-    std::cout << "Adder result with STD: " << result << std::endl;
-    qDebug() << "Adder result with qDebug:" << result;
+    
+    // Start CRSF Manager
+    CRSF crsfManager(CRSF_ADDRESS_RADIO_TRANSMITTER);
+    std::vector<int> new_channels = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};
+    crsfManager.begin("COM3"); // TO-DO: Make this configurable from UI
+
+
+    // Start QML
     QGuiApplication app(argc, argv);
-  
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cout << "SDL_InitSubSystem Error: " << SDL_GetError() << std::endl;
