@@ -1,5 +1,0 @@
-1. Create a QObject that can communicate values up and down from QML <--> CPP
-
-    Check out Grok hehe. Learn how to do it and make a manager / Model object (or class?) basically 
-
------------------------------------------------------------------------------------------------------
