@@ -1,0 +1,6 @@
+[submodule "modules/OpenIPC-QML-Element"]
+	path = modules/OpenIPC-QML-Element
+	url = https://github.com/Hanjocl/OpenIPC-QML-Element.git
+[submodule "modules/CRSF-USB-Host"]
+	path = modules/CRSF-USB-Host
+	url = https://github.com/Hanjocl/CRSF-USB-Host.git
