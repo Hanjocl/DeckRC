@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     
     // Start CRSF Manager
     CRSF crsfManager(CRSF_ADDRESS_RADIO_TRANSMITTER);
-    std::vector<int> new_channels = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};
+    std::vector<int> new_channels = {1500, 1500, 1500, 1500, 1500, 1900, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};
     crsfManager.begin("COM3"); // TO-DO: Make this configurable from UI
 
 
@@ -36,11 +36,7 @@ int main(int argc, char *argv[]) {
     // Controller *controller = new Controller;
     // controller->start();  // Start the worker thread
     // engine.rootContext()->setContextProperty("controller", controller);
-
-    // Create the singleton instance
-    inputController.setCurrentValue(1600);
     
-    std::cout << "Current Value: " << inputController.currentValue() << std::endl;
     engine.rootContext()->setContextProperty("InputController", &inputController);
     
     QObject::connect(
@@ -55,6 +51,7 @@ int main(int argc, char *argv[]) {
     int result_app = app.exec();
 
     // Do stuff after shutting down app
+    crsfManager.stop();
     SDL_Quit();
 
     std::cout << "Closing App... " << std::endl;

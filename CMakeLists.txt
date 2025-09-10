@@ -26,7 +26,7 @@ message(STATUS "Toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 ### LIBRARIES / PACKAGES
 
 find_package(SDL2 REQUIRED)
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Quick Qml)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Quick Qml Concurrent)
 
 add_subdirectory("lib/Controller")
 add_subdirectory("modules/OpenIPC-QML-Element")
@@ -57,6 +57,7 @@ qt_add_qml_module(${PROJECT_NAME}
     QML_FILES
         src/UI/Main.qml
         src/UI/ChannelSettings.qml
+        src/UI/SettingsView.qml
 
     SOURCES
         src/Core/inputControllerModel.h
@@ -104,6 +105,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt6::Gui
     Qt6::Quick
     Qt6::Qml
+    Qt6::Concurrent
 )
 ### END OF LINKING
 

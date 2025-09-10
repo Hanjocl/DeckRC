@@ -9,6 +9,10 @@ ApplicationWindow {
     title: qsTr("DeckRC - Debug 0.1")
 
     Universal.theme: Universal.Dark
+
+    property bool settingsOverlayVisible: false
+
+    
     
     ListModel {
         id: leftButtonsModel
@@ -29,7 +33,11 @@ ApplicationWindow {
         record: function() { InputController.startPolling();  console.log("record function called"); },
         rc_link: function() { inputArea.forceActiveFocus(); console.log("rc_link function called"); },
         status: function() { console.log("status function called"); },
-        settings: function() { console.log("settings function called"); },
+        settings: function() {
+            settingsOverlayVisible = !settingsOverlayVisible;
+            inputArea.forceActiveFocus();
+            console.log("settings function called, overlayVisible:", settingsOverlayVisible);
+        },
         shutdown: function() {
             console.log("Shutdown function called");
             Qt.quit();
@@ -39,6 +47,11 @@ ApplicationWindow {
     RowLayout {
         anchors.fill: parent
         anchors.margins: 20
+
+        Component.onCompleted: {
+            inputArea.forceActiveFocus();
+            InputController.startPolling();
+        }
 
         // Left column sticks to the left
         ColumnLayout {
@@ -98,18 +111,16 @@ ApplicationWindow {
                     }
                 }
                 
-                
-
                 Connections {
                     target: InputController
                     function onKeyEvent(key, qtKeyCode) {
                         display.text = "Key: " + key + " (code: " + qtKeyCode + ")"
                     }
-                }
-                
+                }                
 
                 ColumnLayout {
                     id: root_channels
+                    visible: settingsOverlayVisible
                     Layout.preferredWidth: parent.width
                     Layout.preferredHeight: parent.height
                     anchors {

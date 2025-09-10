@@ -7,12 +7,13 @@
 #include <QTimer>
 #include <QVariant>
 
+#include <SDL_keycode.h>
+
 #include "inputController.h"
 #include "inputTypes.h"
 
 class InputControllerModel : public QObject {
     Q_OBJECT
-    Q_PROPERTY(int currentValue READ currentValue WRITE setCurrentValue NOTIFY currentValueChanged)
     Q_PROPERTY(QVariantList channelValues READ channelValues NOTIFY channelValuesChanged)
 
 public:
@@ -20,29 +21,6 @@ public:
     ~InputControllerModel();
 
     bool init();
-
-    enum class ChannelModes {
-        KEYBOARD_KEY_HOLD,
-        KEYBOARD_KEY_RELEASE,
-        KEYBOARD_KEY_INCREMENT,
-        KEYBOARD_KEY_TOGGLE,
-        KEYBOARD_KEY_TOGGLE_SYMETRIC,
-        KEYBOARD_KEY_TAP,
-
-        JOYSTICK_BUTTON_HOLD,
-        JOYSTICK_BUTTON_RELEASE,
-        JOYSTICK_BUTTON_INCREMENT,
-        JOYSTICK_BUTTON_TOGGLE,
-        JOYSTICK_BUTTON_TOGGLE_SYMETRIC,
-        JOYSTICK_BUTTON_TAP,
-
-        JOYSTICK_AXIS,
-        JOYSTICK_AXIS_HOLD,
-        JOYSTICK_AXIS_TOGGLE,
-        JOYSTICK_AXIS_TOGGLE_SYMETRIC,
-        JOYSTICK_AXIS_INCREMENT,
-    };
-    Q_ENUM(ChannelModes)
 
     // QTIMER
     Q_INVOKABLE void startPolling(int intervalHz = 50);
@@ -54,16 +32,12 @@ public:
 
     // UI COMMANDS
     // void GetInput();
-    // void ApplyConfigToChannel(int channel, int value, ChannelModes mode, SDL_keycode key = nullptr, int JoystickID = nullptr, int JoystickInput)
+    // void ApplyConfigToChannel(int channel, int value, ChannelModes mode, SDL_Keycode key = nullptr, int JoystickID = nullptr, int JoystickInput);
+    
     Q_INVOKABLE void stopScanning() { scanning = false; }
     Q_INVOKABLE void injectKey(int qtKey, const QString& text);
 
-    //Testing
-    int currentValue() const;
-    void setCurrentValue(int value);
-
 signals:
-    void currentValueChanged();
     void channelValuesChanged();
     void keyEvent(QString key, int qtKeyCode);
 
@@ -81,9 +55,6 @@ private:
 
     // Debugging
     void printChannels(const std::vector<ChannelDataType>& channels);
-
-    // Random testing
-    int m_currentValue;
 };
 
 #endif // INPUTCONTROLLERMODEL_H

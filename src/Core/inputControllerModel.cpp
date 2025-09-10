@@ -1,11 +1,12 @@
 #include "inputcontrollermodel.h"
 
 #include <QVariantList>
+#include <QtConcurrent>
 #include <iostream>
 #include <SDL.h>
 
 InputControllerModel::InputControllerModel(QObject *parent, int amount_channels) 
-: QObject(parent), m_currentValue(0), m_inputs(16), m_channels(16) {
+: QObject(parent), m_inputs(16), m_channels(16) {
     std::cout << "Setting up Input Controls " << std::endl;
     //m_inputs.addAxis(0, 0, 0, 500);
     m_inputs.addAxis(1, 1, 0, 500);
@@ -26,7 +27,6 @@ InputControllerModel::~InputControllerModel() {
 }
 
 bool InputControllerModel::init() {
-
     // Initialize any additional resources or settings if needed
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cout << "SDL_InitSubSystem Error: " << SDL_GetError() << std::endl;
@@ -42,8 +42,6 @@ void InputControllerModel::updateInputs() {
     printChannels(m_channels);
 
     const auto channels = m_inputs.getChannels();
-    if (!channels.empty())
-        setCurrentValue(channels.at(0));
 
     emit channelValuesChanged(); // Notify QML to refresh the ListView
 }
@@ -76,36 +74,11 @@ QVariantList InputControllerModel::channelValues() const {
     return list;
 }
 
-// DEBUGGING
-void InputControllerModel::printChannels(const std::vector<ChannelDataType>& channels) {
-    std::cout << "Channels: ";
-    for (size_t i = 0; i < channels.size(); ++i) {
-        std::cout << channels[i];
-        if (i != channels.size() - 1) std::cout << ", ";
-    }
-    std::cout << std::endl;
-}
-
-
-// TEST
-int InputControllerModel::currentValue() const {
-    return m_currentValue;
-}
-
-void InputControllerModel::setCurrentValue(int value) {
-    if (m_currentValue != value) {
-        m_currentValue = value;
-        emit currentValueChanged();
-    }
-}
-
-
 void InputControllerModel::injectKey(int qtKey, const QString& text) {
     // Emit signal to QML
     emit keyEvent(text, qtKey);
 
-    
-    // Optionally inject to SDL
+    // inject to SDL
     SDL_Event sdlEvent{};
     sdlEvent.type = SDL_KEYDOWN;
     sdlEvent.key.state = SDL_PRESSED;
@@ -120,6 +93,20 @@ void InputControllerModel::injectKey(int qtKey, const QString& text) {
     qDebug() << "Injecting key:" << text << "with SDL keycode:" << keycode;
     SDL_PushEvent(&sdlEvent);
 }
+
+
+// DEBUGGING
+void InputControllerModel::printChannels(const std::vector<ChannelDataType>& channels) {
+    std::cout << "Channels: ";
+    for (size_t i = 0; i < channels.size(); ++i) {
+        std::cout << channels[i];
+        if (i != channels.size() - 1) std::cout << ", ";
+    }
+    std::cout << std::endl;
+}
+
+
+
 
 
 
