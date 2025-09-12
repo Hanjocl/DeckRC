@@ -90,14 +90,14 @@ void InputControllerModel::injectKey(int qtKey, const QString& text) {
     keycode = static_cast<SDL_Keycode>(qtKey);  // fallback
 
     sdlEvent.key.keysym.sym = keycode;
-    qDebug() << "Injecting key:" << text << "with SDL keycode:" << keycode;
+    //qDebug() << "Injecting key:" << text << "with SDL keycode:" << keycode;
     SDL_PushEvent(&sdlEvent);
 }
 
 
 // DEBUGGING
 void InputControllerModel::printChannels(const std::vector<ChannelDataType>& channels) {
-    std::cout << "Channels: ";
+    std::cout << "Channels: " << std::dec;
     for (size_t i = 0; i < channels.size(); ++i) {
         std::cout << channels[i];
         if (i != channels.size() - 1) std::cout << ", ";

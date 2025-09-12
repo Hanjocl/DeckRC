@@ -86,7 +86,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
-    CRSF_USB_Host
+    CRSF_USB_Lib
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 

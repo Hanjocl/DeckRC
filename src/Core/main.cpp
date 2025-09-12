@@ -17,9 +17,7 @@ int main(int argc, char *argv[]) {
     // Start CRSF Manager
     CRSF crsfManager(CRSF_ADDRESS_RADIO_TRANSMITTER);
     std::vector<int> new_channels = {1500, 1500, 1500, 1500, 1500, 1900, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};
-    crsfManager.begin("COM3"); // TO-DO: Make this configurable from UI
-
-
+    
     // Start QML
     QGuiApplication app(argc, argv);
 
