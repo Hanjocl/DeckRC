@@ -4,3 +4,12 @@
 [submodule "modules/CRSF-USB-Host"]
 	path = modules/CRSF-USB-Host
 	url = https://github.com/Hanjocl/CRSF-USB-Host.git
+[submodule "3rd/OpenIPC-QML-Element"]
+	path = 3rd/OpenIPC-QML-Element
+	url = https://github.com/Hanjocl/OpenIPC-QML-Element
+[submodule "3rd/ExpressUSB-Controller"]
+	path = 3rd/ExpressUSB-Controller
+	url = https://github.com/Hanjocl/ExpressUSB-Controller
+[submodule "3rd/SDL-RC-Controller"]
+	path = 3rd/SDL-RC-Controller
+	url = https://github.com/Hanjocl/SDL-RC-Controller
