@@ -138,7 +138,7 @@ Rectangle {
             id: root_channels
             Layout.fillWidth: true
             Layout.fillHeight: true
-            color: "#2b2b2b"
+            color: '#fa0000'
             focus: true
 
             Keys.onPressed: function(event) {
@@ -185,17 +185,20 @@ Rectangle {
                 // ---------------- Scrollable channels ----------------
                 ScrollView {
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    Layout.preferredHeight: 600
+                    ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
                     // Use Column instead of ColumnLayout
-                    Column {
+                    ColumnLayout {
                         id: channelsColumn
-                        width: parent.width
                         spacing: 10
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
 
                         Repeater {
                             id: channelRepeater
-                            model: 16
+                            model: 16                     
 
                             ChannelConfigurator_V2 {
                                 ch_id: model.index
@@ -218,6 +221,11 @@ Rectangle {
                                     }
                                 }
                             }
+                        }
+
+                        // ---------------- Dummy Item trick ----------------
+                        Item {
+                            Layout.preferredHeight: 10  // small buffer to force ScrollView to recognize height
                         }
 
                         Connections {
