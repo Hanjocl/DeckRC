@@ -19,19 +19,18 @@ message(STATUS "Config: ${CONFIG_NAME}")
 message(STATUS "Source Dir: ${CMAKE_SOURCE_DIR}")
 message(STATUS "Build Dir: ${CMAKE_BINARY_DIR}")
 message(STATUS "Toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
-
 ### END OF CUSTOM MESSAGES
 
 
 ### LIBRARIES / PACKAGES
 
+
+add_subdirectory("3rd/OpenIPC-QML-Element")
+add_subdirectory("3rd/ExpressUSB-Controller")
+add_subdirectory("3rd/SDL-RC-Controller")
+
 find_package(SDL2 REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Quick Qml Concurrent)
-
-add_subdirectory("lib/Controller")
-add_subdirectory("modules/OpenIPC-QML-Element")
-add_subdirectory("modules/CRSF-USB-Host")
-
 ### END OF LIBRARIES / PACKAGES
 
 
@@ -39,13 +38,6 @@ add_subdirectory("modules/CRSF-USB-Host")
 qt_standard_project_setup()
 qt_add_executable(${PROJECT_NAME}
     src/Core/main.cpp
-    src/Core/inputControllerModel.h
-    src/Core/inputControllerModel.cpp
-    src/Core/inputTypes.h
-    src/Core/ControllerModel/Worker.h
-    src/Core/ControllerModel/Worker.cpp
-    src/Core/ControllerModel/controllerModel.h
-    src/Core/ControllerModel/controllerModel.cpp
 )
 
 qt_policy(SET QTP0004 NEW)
@@ -58,41 +50,21 @@ qt_add_qml_module(${PROJECT_NAME}
         src/UI/Main.qml
         src/UI/ChannelSettings.qml
         src/UI/SettingsView.qml
-
-    SOURCES
-        src/Core/inputControllerModel.h
-        src/Core/inputControllerModel.cpp
-        src/Core/ControllerModel/Worker.h
-        src/Core/ControllerModel/Worker.cpp
-        src/Core/ControllerModel/controllerModel.h
-        src/Core/ControllerModel/controllerModel.cpp
-    )
-
-target_include_directories(AppDeckRC PUBLIC "src/Core/")
-# if(WIN32)
-#     set_target_properties(${PROJECT_NAME} PROPERTIES
-#         MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-#         MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-#         MACOSX_BUNDLE TRUE
-#         WIN32_EXECUTABLE TRUE
-#     )
-# endif()
-### END OF  QT QUICK SETUP
-
+        3rd/SDL-RC-Controller/qml/ChannelConfigurator_V2.qml
+)
 
 ### LINKING
 target_link_libraries(${PROJECT_NAME} PUBLIC 
-    ControllerLib
+    SDL_RC_Controller_Lib
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
-    CRSF_USB_Lib
+    ExpressUSB_Controller_Lib
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
-    OpenIPC_QML_Element
+    OpenIPC_QML_Element_Lib
 )
-
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     ${SDL2_LIBRARIES}
@@ -137,8 +109,3 @@ if(WIN32)
         COMMENT "Copying SDL2 DLL"
     )
 endif()
-
-# add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-#         "C:/Dev/SDL2/lib/x64/SDL2.dll"
-#         $<TARGET_FILE_DIR:${PROJECT_NAME}>)

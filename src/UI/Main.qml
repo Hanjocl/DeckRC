@@ -4,45 +4,12 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ApplicationWindow {
-     
+
     visibility: Window.FullScreen
     title: qsTr("DeckRC - Debug 0.1")
-
     Universal.theme: Universal.Dark
 
     property bool settingsOverlayVisible: false
-
-    
-    
-    ListModel {
-        id: leftButtonsModel
-        ListElement { text: "Capture"; actionId: "capture" }
-        ListElement { text: "Record"; actionId: "record" }
-        ListElement { text: "RC Link"; actionId: "rc_link" }
-    }
-
-    ListModel {
-        id: rightButtonsModel
-        ListElement { text: "status"; actionId: "status" }
-        ListElement { text: "Settings"; actionId: "settings" }
-        ListElement { text: "Shutdown"; actionId: "shutdown" }
-    }
-
-    property var actionFunctions: ({
-        capture: function() { InputController.stopPolling(); console.log("capture function called"); },
-        record: function() { InputController.startPolling();  console.log("record function called"); },
-        rc_link: function() { inputArea.forceActiveFocus(); console.log("rc_link function called"); },
-        status: function() { console.log("status function called"); },
-        settings: function() {
-            settingsOverlayVisible = !settingsOverlayVisible;
-            inputArea.forceActiveFocus();
-            console.log("settings function called, overlayVisible:", settingsOverlayVisible);
-        },
-        shutdown: function() {
-            console.log("Shutdown function called");
-            Qt.quit();
-        }
-    })
 
     RowLayout {
         anchors.fill: parent
@@ -50,34 +17,49 @@ ApplicationWindow {
 
         Component.onCompleted: {
             inputArea.forceActiveFocus();
-            InputController.startPolling();
+            SdlController.startPolling();
         }
 
-        // Left column sticks to the left
+        // Left column
         ColumnLayout {
             id: leftColumn
             Layout.preferredWidth: 200
+            spacing: 10
 
-            Repeater {
-                model: leftButtonsModel
-                Button {
-                    text: model.text
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+            Button {
+                text: "Capture"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                onClicked: {
+                    SdlController.stopPolling();
+                    console.log("capture function called");
+                }
+            }
 
+            Button {
+                text: "Record"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                onClicked: {
+                    SdlController.startPolling();
+                    console.log("record function called");
+                }
+            }
 
-                    onClicked: {
-                        if (actionFunctions[actionId]) {
-                            actionFunctions[actionId]()
-                        }
-                    }
+            Button {
+                text: "RC Link"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                onClicked: {
+                    inputArea.forceActiveFocus();
+                    console.log("rc_link function called");
                 }
             }
         }
 
-        // Spacer fills all the space between left and right columns
+        // Spacer / central input area
         Item {
-            Layout.preferredWidth: parent.width *.9
+            Layout.preferredWidth: parent.width * 0.9
             Layout.fillHeight: true
 
             Rectangle {
@@ -85,18 +67,18 @@ ApplicationWindow {
                 width: parent.width
                 height: parent.height
                 border.color: "white"
-                color: "transparent"
                 border.width: 3
+                color: "transparent"
                 anchors.margins: 10
-
                 focus: true
+
                 Keys.onPressed: function(event) {
-                    InputController.injectKey(event.key, event.text)
+                    SdlController.injectKey(event.key, event.text)
                 }
 
                 Rectangle {
                     anchors.fill: parent
-                    color: "grey"
+                    color: "black"
 
                     Column {
                         anchors.centerIn: parent
@@ -110,72 +92,51 @@ ApplicationWindow {
                         }
                     }
                 }
-                
-                Connections {
-                    target: InputController
-                    function onKeyEvent(key, qtKeyCode) {
-                        display.text = "Key: " + key + " (code: " + qtKeyCode + ")"
-                    }
-                }                
+            }
 
-                ColumnLayout {
-                    id: root_channels
-                    visible: settingsOverlayVisible
-                    Layout.preferredWidth: parent.width
-                    Layout.preferredHeight: parent.height
-                    anchors {
-                        fill: parent
-                    }
+            SettingsView {
+                id: settingsView
+                width: parent.width
+                height: parent.height
+                visible : false
+            }
+        }
 
-                    function handleInputCheckedChanged(checked) {
-                        console.log("Checked state changed:", checked)
-                        if (checked) {
-                            InputController.GetInput();
-                        } else {
-                            InputController.stopScanning();
-                            InaputController.startPolling();
-                        }
-                    }
-
-                    Repeater {
-                        id: channelRepeater
-                        model: 16
-    
-                        ChannelSettings {
-                            Layout.alignment: Qt.AlignHCenter
-                            id: settings
-                            ch_id: model.index    
-                            ch_current_value: InputController.channelValues[model.index]
-                            ch_min: 1000
-                            ch_max: 2000
-                            onInputCheckedChanged: (checked) => root_channels.handleInputCheckedChanged(checked)
-                        }
-
-                        
-                    }
-                }
-
-            }            
-        }         
-
-        // Right column sticks to the right
+        // Right column
         ColumnLayout {
             id: rightColumn
             Layout.preferredWidth: 200
             spacing: 10
 
-            Repeater {
-                model: rightButtonsModel
-                Button {
-                    text: model.text
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+            Button {
+                text: "Status"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                onClicked: {
+                    console.log("status function called");
+                }
+            }
 
-                    onClicked: {
-                        if (actionFunctions[actionId]) {
-                            actionFunctions[actionId]()
-                        }
-                    }
+            Button {
+                text: "Settings"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                checkable: true
+
+                onClicked: {
+                    settingsView.visible = !settingsView.visible;
+                    inputArea.forceActiveFocus();
+                    console.log("settings function called, overlayVisible:", settingsOverlayVisible);
+                }
+            }
+
+            Button {
+                text: "Shutdown"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                onClicked: {
+                    console.log("Shutdown function called");
+                    Qt.quit();
                 }
             }
         }
