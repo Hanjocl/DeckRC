@@ -3,6 +3,9 @@ import QtQuick.Controls.Universal
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import realTimePlayer 1.0
+
+
 ApplicationWindow {
 
     visibility: Window.FullScreen
@@ -26,24 +29,16 @@ ApplicationWindow {
             Layout.preferredWidth: 200
             spacing: 10
 
-            Button {
-                text: "Capture"
+            CaptureButton{
+                id: captureButton
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                onClicked: {
-                    SdlController.stopPolling();
-                    console.log("capture function called");
-                }
             }
 
-            Button {
-                text: "Record"
+            RecordButton {
+                id: myRecorder
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                onClicked: {
-                    SdlController.startPolling();
-                    console.log("record function called");
-                }
             }
 
             Button {
@@ -71,6 +66,7 @@ ApplicationWindow {
                 color: "transparent"
                 anchors.margins: 10
                 focus: true
+                z: 0
 
                 Keys.onPressed: function(event) {
                     SdlController.injectKey(event.key, event.text)
@@ -94,7 +90,90 @@ ApplicationWindow {
                 }
             }
 
+            QQuickRealTimePlayer {
+                z: 1
+                id: player
+                anchors.fill: parent
+                property var playingFile
+                Component.onCompleted: {
+                    NativeApi.onRtpStream.connect((sdpFile)=>{
+                        playingFile = sdpFile;
+                        play(sdpFile)
+                    });
+                    onPlayStopped.connect(()=>{
+                        stop();
+                        play(playingFile)
+                    });
+                }
+            }
+
+            Row {
+                spacing: 10
+                z: 2
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+                anchors.margins: 5
+
+                // Bitrate display
+                Text {
+                    id: bitrateText
+                    text: "0bps"
+                    font.pixelSize: 14
+                    color: "#ffffff"
+                    horizontalAlignment: Text.AlignHCenter
+
+                    Component.onCompleted: {
+                        player.onBitrate.connect((btr)=>{
+                            if(btr > 1000*1000){
+                                text = Number(btr/1000/1000).toFixed(2) + "Mbps";
+                            } else if(btr > 1000){
+                                text = Number(btr/1000).toFixed(2) + "Kbps";
+                            } else {
+                                text = btr + "bps";
+                            }
+                        });
+                    }
+                }
+
+                // RC Link Status
+                Text {
+                    id: rcLinkStatus
+                    textFormat: Text.RichText
+                    font.pixelSize: 14
+
+                    // Fixed part
+                    property string prefix: "<font color='white'>Control Link TX:</font> "
+                    // Dynamic part
+                    property string status: "Unknown"
+
+                    text: prefix + "<font color='white'>" + status + "</font>"
+
+                    Connections {
+                        target: CsrfApi
+
+                        onConnected: {
+                            rcLinkStatus.status = "<font color='green'>Connected</font>"
+                            log.console("Testing") 
+                        }
+                            onDisconnected: rcLinkStatus.status = "<font color='red'>Disconnected</font>"
+                    }
+
+                    Component.onCompleted: {
+                        if (CsrfApi.isConnected()) {
+                            rcLinkStatus.status = "<font color='green'>Connected</font>"
+                        } else {
+                            rcLinkStatus.status = "<font color='white'>Unknown</font>"
+                        }
+                        rcLinkStatus.text = rcLinkStatus.prefix + rcLinkStatus.status
+                    }
+
+                    onStatusChanged: rcLinkStatus.text = rcLinkStatus.prefix + rcLinkStatus.status
+                }
+            }
+
+
             SettingsView {
+                z:3
                 id: settingsView
                 width: parent.width
                 height: parent.height

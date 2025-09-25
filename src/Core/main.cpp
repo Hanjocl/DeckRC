@@ -6,11 +6,17 @@
 #include <iostream>
 #include <SDL.h>
 
+// CRSF Controller
 #include "crsf.h"
 #include <QmlCrsfApi.h>
-
+// SDL Controller
 #include "inputController.h"
 #include <QmlControllerApi.h>
+
+//OpenIPC Controller
+#include <QQuickWindow>
+#include "QQuickRealTimePlayer.h"
+#include <QmlNativeAPI.h>
 
 int main(int argc, char *argv[]) {
     std::cout << "Launching DeckRC " << std::endl;
@@ -35,7 +41,12 @@ int main(int argc, char *argv[]) {
         crsfManager.setChannels(channels);
     });
 
-    
+
+    // OpenIPC
+    QCoreApplication::setAttribute (Qt::AA_UseDesktopOpenGL);    
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+    QQuickWindow::setSceneGraphBackend("opengl");
+
 
     // Start QML
     QGuiApplication app(argc, argv);
@@ -45,6 +56,10 @@ int main(int argc, char *argv[]) {
     engine.rootContext()->setContextProperty("InputController", &inputController);
     engine.rootContext()->setContextProperty("CsrfApi", &qmlCrsfApi);
     engine.rootContext()->setContextProperty("SdlController", &inputController);
+    
+    qmlRegisterType<QQuickRealTimePlayer>("realTimePlayer", 1, 0, "QQuickRealTimePlayer");  
+    auto &qmlNativeApi = QmlNativeAPI::Instance();
+    engine.rootContext()->setContextProperty("NativeApi", &qmlNativeApi);
     
     QObject::connect(
         &engine,
@@ -58,6 +73,7 @@ int main(int argc, char *argv[]) {
     int result_app = app.exec();
 
     // Do stuff after shutting down app
+    qmlNativeApi.Stop();
     crsfManager.stop();
     SDL_Quit();
 

@@ -23,11 +23,9 @@ message(STATUS "Toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
 
 
 ### LIBRARIES / PACKAGES
-
-
-add_subdirectory("3rd/OpenIPC-QML-Element")
-add_subdirectory("3rd/ExpressUSB-Controller")
 add_subdirectory("3rd/SDL-RC-Controller")
+add_subdirectory("3rd/ExpressUSB-Controller")
+add_subdirectory("3rd/OpenIPC-QML-Element")
 
 find_package(SDL2 REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Quick Qml Concurrent)
@@ -49,6 +47,8 @@ qt_add_qml_module(${PROJECT_NAME}
     QML_FILES
         src/UI/Main.qml
         src/UI/ChannelSettings.qml
+        src/UI/RecordButton.qml
+        src/UI/CaptureButton.qml
         src/UI/SettingsView.qml
         3rd/SDL-RC-Controller/qml/ChannelConfigurator_V2.qml
 )
@@ -69,7 +69,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     ${SDL2_LIBRARIES}
 )
-# target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt6::Core
