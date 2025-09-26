@@ -1,18 +1,11 @@
-# DeckRC
-Another attempt
+# How to install:
+1. Go through the submodule installations guides to install all dependecies (see the following READMEs)
+    - [ExpressUSB-Controller](https://github.com/Hanjocl/ExpressUSB-Controller)
+    - [OpenIPC-QML-Element](https://github.com/Hanjocl/OpenIPC-QML-Element)
+    - [SDL-RC-Controller](https://github.com/Hanjocl/SDL-RC-Controller)
+  
+    - For windows I used VCPKG for most, expect for QML
+    - For Linux I just used the platfroms package manager, expect for QML
+    - QML was installed through their online installer
 
-TO-DO:
-- Make Serial port configurable through UI
-- Connect Controller input to CRSF channels
-- Fix the inputController Class so it can do:
-    1. Change configs
-    2. auto-load config
-
-
-
-    LOR:
-    - Needs to be loaded from JSON file
-    - Needs to be able to switch seamless from settings to other settings
-    - Needs to be able to switch sealess from channel settings to other channel settings
-    - Configuration needs to take less than a few minutes
-    - Display should show all values the user needs
+---
