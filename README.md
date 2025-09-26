@@ -19,6 +19,6 @@ Go through the submodule installations guides to install all dependecies (see th
 - For Linux I just used the platfroms package manager, expect for QML
 - QML was installed through their online installer
 
-### step 4 - Build and pray for now error
+### step 4 - Build and pray for no error
 - if you get any, I suggest asking GPT
 - if that does not work out, Ask a friend or make a issue!
