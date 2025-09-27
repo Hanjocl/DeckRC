@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     // CRSF Transmitter
     CRSF crsfManager(CRSF_ADDRESS_RADIO_TRANSMITTER); // Creates a remote controller
     QmlCrsfAPI qmlCrsfApi(crsfManager);
-    std::vector<int> new_channels = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};
+    std::vector<int> new_channels = {1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000};
     crsfManager.setChannels(new_channels);
 
     
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     
 
     // Start QML
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/DeckRC/src/UI/Main.qml"));
     

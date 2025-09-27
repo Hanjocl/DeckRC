@@ -199,9 +199,20 @@ Rectangle {
                         nameFilters: ["Key Files (*.key)"]
 
                         onAccepted: {
-                            keySelector.text = fileDialog.file;
-                            keySelector.text = keySelector.text.replace('file:///','')
-                            console.log("Key found at: ", keySelector.text)
+                            // Ensure the path is a proper local file path
+                            var filePath = fileDialog.file.toString()
+
+                            console.log(Qt.platform.os)
+                            if (Qt.platform.os === "windows") {
+                                // On Windows, Remove three slash to start with 'C:/...'
+                                filePath = filePath.replace("file:///", "")
+                            } else {
+                                // Linux: remove only two slashes to keep '/home/...'
+                                filePath = filePath.replace("file://", "")
+                            }
+
+                            console.log("Key found at:", keySelector.text)
+                            keySelector.text = filePath
                         }
                     }
                     Button {
@@ -239,12 +250,13 @@ Rectangle {
                         } else {
                             NativeApi.Stop();
                             player.stop();
+                            stream_starter.stream_started = false
                         }
                     }
 
                     Component.onCompleted: {
                         NativeApi.onWifiStop.connect(()=>{
-                            checked = false;
+                            stream_starter.stream_started = false;
                             player.stop();
                         });
 
@@ -313,8 +325,8 @@ Rectangle {
                     delegate: ChannelConfigurator_V2 {
                         ch_id: model.index
                         ch_current_value: SdlController.channelValues[model.index]
-                        ch_min: 1000
-                        ch_max: 2000
+                        ch_min: 0
+                        ch_max: 1984
                         onScanForInputChanged: (checked) => channelsColum.handleInputCheckedChanged(ch_id, checked)
                         onApplyConfig: { SdlController.ApplyChannelSettings(ch_id, selected_behaviour, value_offset) }
                         onClearConfig: { SdlController.ClearChannelConfig(ch_id) }
