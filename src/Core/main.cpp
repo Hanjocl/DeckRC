@@ -1,6 +1,6 @@
 #define SDL_MAIN_HANDLED
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <iostream>
@@ -12,28 +12,28 @@
 // SDL Controller
 #include "inputController.h"
 #include <QmlControllerApi.h>
-
 //OpenIPC Controller
 #include <QQuickWindow>
 #include "QQuickRealTimePlayer.h"
 #include <QmlNativeAPI.h>
 
+
 int main(int argc, char *argv[]) {
     std::cout << "Launching DeckRC " << std::endl;
     
-    // Create instances CRSF and QML_CRSF
+    // CRSF Transmitter
     CRSF crsfManager(CRSF_ADDRESS_RADIO_TRANSMITTER); // Creates a remote controller
     QmlCrsfAPI qmlCrsfApi(crsfManager);
     std::vector<int> new_channels = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};
     crsfManager.setChannels(new_channels);
 
     
-    
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cout << "SDL_InitSubSystem Error: " << SDL_GetError() << std::endl;
         return false;
     }
     
+    // SDL Controller
     Inputs sdlController(16); // Create controller with 16 channels
     QmlControllerApi inputController(sdlController);
     inputController.setDebug(false);
@@ -41,12 +41,11 @@ int main(int argc, char *argv[]) {
         crsfManager.setChannels(channels);
     });
 
-
     // OpenIPC
     QCoreApplication::setAttribute (Qt::AA_UseDesktopOpenGL);    
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
     QQuickWindow::setSceneGraphBackend("opengl");
-
+    
 
     // Start QML
     QGuiApplication app(argc, argv);

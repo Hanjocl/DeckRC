@@ -8,7 +8,7 @@
       "inherits": "linux-config-debug",
       "generator": "Ninja",
       "cacheVariables": {
-            "CMAKE_PREFIX_PATH": "/home/mtf-nomad/Qt/6.9.2/gcc_64/lib/cmake"
+          "Qt6_DIR": "~/Qt/6.9.2/gcc_64/lib/cmake/Qt6"            
         }
     },
     {
