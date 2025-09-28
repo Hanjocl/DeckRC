@@ -15,12 +15,11 @@
       "name": "DeckRC-windows",
       "displayName": "DeckRC - Windows Configurations",
       "description": "User Configuration for Windows",
-      "inherits": "windows-config-debug",
+      "inherits": "windows-config-base",
       "generator": "Visual Studio 17 2022",
       "cacheVariables": {
         "CMAKE_PREFIX_PATH": "C:/Qt/6.9.2/msvc2022_64/lib/cmake",
-            "CMAKE_TOOLCHAIN_FILE": "C:/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake"
-
+        "CMAKE_TOOLCHAIN_FILE": "C:/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake"
         }
     }
   ]

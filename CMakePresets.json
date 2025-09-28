@@ -1,55 +1,99 @@
 {
-    "version": 8,
-    "configurePresets": [
-        {
-            "name": "base-config",
-            "displayName": "Base Configuration",
-            "description": "Sets some standard configuration options.",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "cacheVariables": {
-                "CONFIG_NAME": "${presetName}"
-            },
-            "hidden": true
-        },
+  "version": 8,
+  "configurePresets": [
+    {
+      "name": "base-config",
+      "displayName": "Base Configuration",
+      "description": "Sets some standard configuration options.",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CONFIG_NAME": "${presetName}"
+      },
+      "hidden": true
+    },
 
-        {
-            "name": "base-windows-config",
-            "displayName": "Windows Configuration",
-            "description": "Windows Specific Base Configurations.",
-            "inherits": "base-config",
-            "cacheVariables": {
-            },
-            "hidden": true
-        },
+    {
+      "name": "windows-config-base",
+      "displayName": "Windows Base Configuration",
+      "description": "Windows Specific Base Configurations.",
+      "inherits": "base-config",
+      "hidden": true
+    },
 
-        {
-            "name": "windows-config-debug",
-            "displayName": "Windows Debug Configuration",
-            "description": "Windows Specific Debug Configurations",
-            "inherits": "base-windows-config",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            },
-            "hidden": true
-        },
+    {
+      "name": "linux-config-base",
+      "displayName": "Linux Base Configuration",
+      "description": "Linux Base Configurations",
+      "inherits": "base-config",
+      "hidden": true
+    },
 
-        {
-            "name": "base-linux-config",
-            "displayName": "Linux Configuration",
-            "description": "Linux Specific Base Configuration.",
-            "inherits": "base-config",
-            "hidden": true
-        },
+    {
+      "name": "linux-config-debug",
+      "displayName": "Linux Debug Configuration",
+      "inherits": "linux-config-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "hidden": true
+    },
 
-        {
-            "name": "linux-config-debug",
-            "displayName": "Linux Configuration",
-            "description": "Linux Specific Debug Configuration.",
-            "inherits": "base-config",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            },
-            "hidden": true
-        }
-    ]
+    {
+      "name": "linux-config-release",
+      "displayName": "Linux Release Configuration",
+      "inherits": "linux-config-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      },
+      "hidden": true
+    },
+
+    {
+      "name": "DeckRC-linux",
+      "displayName": "DeckRC Linux",
+      "description": "Linux configuration using Ninja",
+      "inherits": "linux-config-release",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "Qt6_DIR": "~/Qt/6.9.2/gcc_64/lib/cmake/Qt6"
+      }
+    },
+
+    {
+      "name": "DeckRC-windows",
+      "displayName": "DeckRC Windows",
+      "description": "Windows configuration using Visual Studio",
+      "inherits": "windows-config-base",
+      "generator": "Visual Studio 17 2022",
+      "cacheVariables": {
+        "CMAKE_PREFIX_PATH": "C:/Qt/6.9.2/msvc2022_64/lib/cmake",
+        "CMAKE_TOOLCHAIN_FILE": "C:/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      }
+    }
+  ],
+
+  "buildPresets": [
+    {
+      "name": "DeckRC-windows-release",
+      "displayName": "Windows Release Build",
+      "configurePreset": "DeckRC-windows",
+      "configuration": "Release"
+    },
+    {
+      "name": "DeckRC-windows-debug",
+      "displayName": "Windows Debug Build",
+      "configurePreset": "DeckRC-windows",
+      "configuration": "Debug"
+    },
+    {
+      "name": "DeckRC-linux-release",
+      "displayName": "Linux Release Build",
+      "configurePreset": "DeckRC-linux"
+    },
+    {
+      "name": "DeckRC-linux-debug",
+      "displayName": "Linux Debug Build",
+      "configurePreset": "linux-config-debug"
+    }
+  ]
 }

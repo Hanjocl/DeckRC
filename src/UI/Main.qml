@@ -77,7 +77,7 @@ ApplicationWindow {
                 id: logging
                 anchors.centerIn: parent
                 spacing: 10
-                z: 4
+                z: 1
                 visible: true
 
                 // Default display / placeholder text
