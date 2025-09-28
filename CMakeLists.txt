@@ -95,7 +95,7 @@ if(WIN32)
     
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${QT_WINDEPLOYQT_EXECUTABLE} 
-            --qmldir ${CMAKE_SOURCE_DIR}/src/UI  # For QML files
+            --qmldir ${CMAKE_CURRENT_SOURCE_DIR}/src/UI  # For QML files
             # --debug                              # Use --release for release builds
             # --compiler-runtime                   # Include VC++ redistributables
             $<TARGET_FILE:${PROJECT_NAME}>

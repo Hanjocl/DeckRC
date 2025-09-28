@@ -71,22 +71,54 @@ ApplicationWindow {
                 Keys.onPressed: function(event) {
                     SdlController.injectKey(event.key, event.text)
                 }
+            }
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: "black"
+            Column {
+                id: logging
+                anchors.centerIn: parent
+                spacing: 10
+                z: 4
+                visible: true
 
-                    Column {
-                        anchors.centerIn: parent
-                        spacing: 10
+                // Default display / placeholder text
+                Text {
+                    id: latestMessage
+                    text: "Status unknown"
+                    font.pointSize: 18
+                    color: "white"
+                    wrapMode: Text.Wrap
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
 
-                        Text {
-                            id: display
-                            text: "Press a key"
-                            font.pointSize: 22
-                            color: "blue"
+                // Latest log message
+                Text {
+                    id: latestLog
+                    text: ""
+                    font.pointSize: 14
+                    color: "grey"
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    wrapMode: Text.Wrap
+                }
+
+                Component.onCompleted: {
+                    // Connect log messages
+                    NativeApi.onLog.connect((level, msg) => {
+                        latestLog.text = msg
+
+                        if (msg.includes("Creating Rtl8812aDevice")) {
+                            latestMessage.text = "RTL8812AU found"
                         }
-                    }
+
+                        if (msg.includes("Listening")) {
+                            latestMessage.text = "Waiting for stream"
+                        }
+
+                        if (msg.includes("=stoped=")) {
+                            latestMessage.text = "Stream stopped"
+                        }
+                    });
                 }
             }
 
@@ -99,10 +131,14 @@ ApplicationWindow {
                     NativeApi.onRtpStream.connect((sdpFile)=>{
                         playingFile = sdpFile;
                         play(sdpFile)
+                        logging.visible = false
+                        visible = true
                     });
                     onPlayStopped.connect(()=>{
                         stop();
                         play(playingFile)
+                        logging.visible = true
+                        visible = false
                     });
                 }
             }
