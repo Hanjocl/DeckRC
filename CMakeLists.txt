@@ -64,13 +64,17 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 ### INSTALL RULES
 include(GNUInstallDirs)
 
-# Install QML files
-install(DIRECTORY src/UI DESTINATION ${CMAKE_INSTALL_BINDIR}/qml/DeckRC)
-install(DIRECTORY 3rd/SDL-RC-Controller/qml DESTINATION ${CMAKE_INSTALL_BINDIR}/qml/DeckRC)
+# # Install QML files
+# install(DIRECTORY src/UI DESTINATION ${CMAKE_INSTALL_BINDIR}/qml/DeckRC)
+# install(DIRECTORY 3rd/SDL-RC-Controller/qml DESTINATION ${CMAKE_INSTALL_BINDIR}/qml/DeckRC)
 
 ### DEPLOYMENT FOLDER
 set(DEPLOY_DIR "${CMAKE_BINARY_DIR}/deploy")
 file(MAKE_DIRECTORY ${DEPLOY_DIR})
+
+### COPY QML FILES
+install(DIRECTORY src/UI DESTINATION ${DEPLOY_DIR}/qml/DeckRC)
+install(DIRECTORY 3rd/SDL-RC-Controller/qml DESTINATION ${DEPLOY_DIR}/qml/DeckRC)
 
 ### WINDOWS: copy DLLs and run windeployqt
 if(WIN32)
@@ -107,27 +111,19 @@ if(WIN32)
 
 ### LINUX: copy executable and shared libraries
 elseif(UNIX AND NOT APPLE)
-    # Copy executable
-    install(TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION ${DEPLOY_DIR}
+    # Generate a deployment script for the executable (Qt 6.5+)
+    qt_generate_deploy_app_script(
+        TARGET ${PROJECT_NAME}
+        FILENAME_VARIABLE deploy_script
+        NO_UNSUPPORTED_PLATFORM_ERROR
     )
 
-    # Copy all .so files from build directories to deploy folder
-    file(GLOB_RECURSE ALL_SOS "${CMAKE_BINARY_DIR}/*.so*")
-    foreach(SO_FILE ${ALL_SOS})
-        file(COPY ${SO_FILE} DESTINATION ${DEPLOY_DIR})
-    endforeach()
+    # Run the deployment script during install
+    install(SCRIPT ${deploy_script})
+
+    ## NEED MORE STUFF TO MAKE WORKING...
+    # Qt version error with build on 6.9... and system using 6.8...
 endif()
-
-### COPY QML FILES
-install(DIRECTORY src/UI DESTINATION ${DEPLOY_DIR}/qml/DeckRC)
-install(DIRECTORY 3rd/SDL-RC-Controller/qml DESTINATION ${DEPLOY_DIR}/qml/DeckRC)
-
-### MAKE CPack INCLUDE EVERYTHING IN DEPLOY
-install(DIRECTORY ${DEPLOY_DIR}/ DESTINATION .
-    PATTERN "*.pdb" EXCLUDE  # optional: skip debug symbols
-)
-
 
 ### CPACK PACKAGING
 include(InstallRequiredSystemLibraries)
@@ -137,6 +133,22 @@ if(WIN32)
 elseif(UNIX AND NOT APPLE)
     set(CPACK_GENERATOR "TGZ")
 endif()
+
+# Package name and version
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-Linux-x86_64")
+
+# Include only deploy folder
+install(DIRECTORY ${DEPLOY_DIR}/
+    DESTINATION .
+    PATTERN "*.pdb" EXCLUDE     # optional: skip Windows debug symbols
+)
+
+# Optional: Short description
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJECT_DESCRIPTION}")
+set(CPACK_PACKAGE_VENDOR "Untested Prototypes")
+set(CPACK_PACKAGE_CONTACT "See github pageg")
 
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})

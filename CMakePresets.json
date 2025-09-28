@@ -49,13 +49,25 @@
     },
 
     {
-      "name": "DeckRC-linux",
-      "displayName": "DeckRC Linux",
-      "description": "Linux configuration using Ninja",
-      "inherits": "linux-config-release",
+      "name": "DeckRC-linux-debug",
+      "displayName": "DeckRC Linux Debug",
+      "description": "Linux DEBUG configuration using Ninja",
+      "inherits": "linux-config-debug",
       "generator": "Ninja",
       "cacheVariables": {
         "Qt6_DIR": "~/Qt/6.9.2/gcc_64/lib/cmake/Qt6"
+      }
+    },
+
+    {
+      "name": "DeckRC-linux-release",
+      "displayName": "DeckRC Linux Release",
+      "description": "Linux RELEASE configuration using Ninja",
+      "inherits": "linux-config-release",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "Qt6_DIR": "~/Qt/6.9.2/gcc_64/lib/cmake/Qt6",
+        "LD_LIBRARY_PATH": "~/Qt/6.9.2/gcc_64/lib:$LD_LIBRARY_PATH"
       }
     },
 
@@ -86,14 +98,14 @@
       "configuration": "Debug"
     },
     {
-      "name": "DeckRC-linux-release",
-      "displayName": "Linux Release Build",
-      "configurePreset": "DeckRC-linux"
-    },
-    {
       "name": "DeckRC-linux-debug",
       "displayName": "Linux Debug Build",
-      "configurePreset": "linux-config-debug"
+      "configurePreset": "DeckRC-linux-debug"
+    },
+    {
+      "name": "DeckRC-linux-release",
+      "displayName": "Linux Release Build",
+      "configurePreset": "DeckRC-linux-release"
     }
   ]
 }
