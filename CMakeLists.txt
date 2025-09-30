@@ -127,17 +127,18 @@ endif()
 
 ### CPACK PACKAGING
 include(InstallRequiredSystemLibraries)
-
-if(WIN32)
-    set(CPACK_GENERATOR "ZIP")
-elseif(UNIX AND NOT APPLE)
-    set(CPACK_GENERATOR "TGZ")
-endif()
-
 # Package name and version
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
-set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-Linux-x86_64")
+
+if(WIN32)
+    set(CPACK_GENERATOR "ZIP")
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-Windows-x86_64")
+    elseif(UNIX AND NOT APPLE)
+    set(CPACK_GENERATOR "TGZ")
+    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-Linux-x86_64")
+endif()
+
 
 # Include only deploy folder
 install(DIRECTORY ${DEPLOY_DIR}/
